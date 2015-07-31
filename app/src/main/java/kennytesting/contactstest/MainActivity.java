@@ -46,9 +46,23 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        switch(position) {
+            case 0:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, ContactsFragment.newInstance(position + 1))
+                        .commit();
+                break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, SearchFragment.newInstance(position + 1))
+                        .commit();
+                break;
+            default:
+                fragmentManager.beginTransaction()
+                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                    .commit();
+                break;
+        }
     }
 
     public void onSectionAttached(int number) {
