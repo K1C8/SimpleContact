@@ -13,6 +13,11 @@ import android.view.ViewGroup;
 public class SearchFragment extends Fragment {
 
     /**
+     * Logging tag.
+     */
+    private static final String TAG = "SearchFragment";
+
+    /**
      * The fragment argument representing the section number for this
      * fragment.
      */
