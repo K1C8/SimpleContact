@@ -92,6 +92,10 @@ public class MainActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
+    public void setActionBarTitle(String title) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(title);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,10 +127,12 @@ public class MainActivity extends ActionBarActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, SearchFragment.newInstance(2))
                         .commit();
+                setActionBarTitle(getString(R.string.title_sectionSearch));
                 return true;
             case R.id.action_new:
                 Toast.makeText(getApplication(), "Adding new contact", Toast.LENGTH_SHORT)
                         .show();
+                setActionBarTitle(getString(R.string.title_sectionAdd));
             default:
                 return super.onOptionsItemSelected(item);
         }
