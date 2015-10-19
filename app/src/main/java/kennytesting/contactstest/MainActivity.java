@@ -126,6 +126,7 @@ public class MainActivity extends ActionBarActivity
             case R.id.action_search:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, SearchFragment.newInstance(2))
+                        .addToBackStack(null)
                         .commit();
                 setActionBarTitle(getString(R.string.title_sectionSearch));
                 return true;
