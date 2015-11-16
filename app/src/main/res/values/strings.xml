@@ -10,10 +10,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string-array name="navigation_drawer_list">
-        <item>联系人列表</item>
-        <item>添加联系人</item>
-        <item>查找联系人</item>
-        <item>Section3</item>
+        <item>@string/title_sectionContacts</item>
+        <item>@string/title_sectionSearch</item>
+        <item>@string/title_sectionAdd</item>
+        <item>@string/title_section3</item>
     </string-array>
 
     <string name="fragment_search_content">搜索条件</string>

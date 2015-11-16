@@ -1,6 +1,8 @@
 package kennytesting.contactstest;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,11 +30,6 @@ public class MainActivity extends AppCompatActivity {
      * Logging tag.
      */
     private static final String TAG = "MainActivity";
-
-//    /**
-//     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-//     */
-//    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     /**
      *  Navigation Drawer related items.
@@ -55,11 +53,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Inflate the overlay layer of the nav drawer
+        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        DrawerLayout drawer = (DrawerLayout)inflater.inflate(R.layout.drawer_overlay, null);
+
+        // HACK: "steal" the first child of decor view
+        ViewGroup overlay = (ViewGroup)getWindow().getDecorView();
+        View child = overlay.getChildAt(0);
+        overlay.removeView(child);
+        FrameLayout container = (FrameLayout) drawer.findViewById(R.id.layer_container); // This is the container we defined just now.
+        container.addView(child);
+
+        // Make the drawer replace the first child
+        overlay.addView(drawer);
+
         Toolbar mToolbar = (Toolbar) findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(mToolbar);
-        //removed, unavailable since sdk v22
-//        mNavigationDrawerFragment = (NavigationDrawerFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         mTitle = getTitle();
         mDrawerTitle = getTitle();
@@ -68,10 +78,8 @@ public class MainActivity extends AppCompatActivity {
         mFragmentsList = getResources().getStringArray(R.array.navigation_drawer_list);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        Log.i(TAG, "Checkpoint before ArrayAdapter reached.");
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_navigation_item,
-                R.id.drawer_TextView_fragment_titles, mFragmentsList));
-        Log.i(TAG, "Checkpoint after ArrayAdapter reached.");
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_navigation_item, mFragmentsList));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         // Set up the listener for open and close events.
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -91,43 +99,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
-    // update the main content by replacing fragments
-    public void selectItem(int position) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        switch(position) {
-            case 0:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, ContactsFragment.newInstance(position + 1))
-                        .commit();
-                Log.v(TAG, "Item " + getString(R.string.title_sectionContacts)
-                        + " in navigation drawer is selected, switching to ContactsFragment.");
-                break;
-            case 1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, SearchFragment.newInstance(position + 1))
-                        .commit();
-                Log.v(TAG, "Item " + getString(R.string.title_sectionSearch)
-                        + " in navigation drawer is selected, switching to SearchFragment.");
-                break;
-            default:
-                fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                    .commit();
-                Log.v(TAG, "Item " + getString(R.string.title_section3)
-                        + " in navigation drawer is selected, switching to PlaceholderFragment.");
-                break;
-        }
-        mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
@@ -140,6 +113,19 @@ public class MainActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
@@ -149,36 +135,18 @@ public class MainActivity extends AppCompatActivity {
                 mTitle = getString(R.string.title_sectionSearch);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_sectionAdd);
                 break;
             case 4:
-                mTitle = getString(R.string.title_sectionAdd);
+                mTitle = getString(R.string.title_section3);
                 break;
         }
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
-    public void setActionBarTitle(String title) {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(title);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-//            return true;
-//        }
+        getMenuInflater().inflate(R.menu.main, menu);
+        restoreActionBar();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -200,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
                         + getString(R.string.title_sectionSearch) + " in optionsMenu.");
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, SearchFragment.newInstance(2))
-                        .addToBackStack(null)
                         .commit();
                 setActionBarTitle(getString(R.string.title_sectionSearch));
                 return true;
@@ -209,12 +176,67 @@ public class MainActivity extends AppCompatActivity {
                         + getString(R.string.title_sectionAdd) + " in optionsMenu.");
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, AddFragment.newInstance(4))
-                        .addToBackStack(null)
                         .commit();
                 Toast.makeText(getApplication(), "Adding new contact", Toast.LENGTH_SHORT)
                         .show();
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // update the main content by replacing fragments
+    public void selectItem(int position) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        switch(position) {
+            case 0:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, ContactsFragment.newInstance(position + 1))
+                        .commit();
+                Log.v(TAG, "Item " + getString(R.string.title_sectionContacts)
+                        + " in navigation drawer is selected, switching to ContactsFragment.");
+                break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, SearchFragment.newInstance(position + 1))
+                        .commit();
+                Log.v(TAG, "Item " + getString(R.string.title_sectionSearch)
+                        + " in navigation drawer is selected, switching to SearchFragment.");
+                break;
+            case 2:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, AddFragment.newInstance(position + 1))
+                        .commit();
+                Log.v(TAG, "Item " + getString(R.string.title_sectionAdd)
+                        + " in navigation drawer is selected, switching to SearchFragment.");
+                break;
+            default:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .commit();
+                Log.v(TAG, "Item " + getString(R.string.title_section3)
+                        + " in navigation drawer is selected, switching to PlaceholderFragment.");
+                break;
+        }
+        mDrawerList.setItemChecked(position, true);
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    public void restoreActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
+    }
+
+    public void setActionBarTitle(String title) {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(title);
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
         }
     }
 
