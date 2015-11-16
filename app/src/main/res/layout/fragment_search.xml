@@ -14,7 +14,7 @@
 
 
         <TextView
-            android:id="@+id/fragment_search_name"
+            android:id="@+id/fragment_search_textView_content"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/fragment_search_content"
@@ -22,8 +22,10 @@
         </TextView>
 
         <EditText
+            android:id="@+id/fragment_search_editText_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:hint="@string/fragment_search_hint">
 
         </EditText>
 

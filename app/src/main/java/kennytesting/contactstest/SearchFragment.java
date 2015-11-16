@@ -35,6 +35,10 @@ public class SearchFragment extends Fragment {
         return fragment;
     }
 
+//    public void onNavigationDrawerItemSelected(int position) {
+//
+//    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

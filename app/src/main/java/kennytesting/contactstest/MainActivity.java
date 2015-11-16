@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,16 +58,19 @@ public class MainActivity extends ActionBarActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, ContactsFragment.newInstance(position + 1))
                         .commit();
+                Log.v(TAG, "Switching to ContactsFragment.");
                 break;
             case 1:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, SearchFragment.newInstance(position + 1))
                         .commit();
+                Log.v(TAG, "Switching to SearchFragment.");
                 break;
             default:
                 fragmentManager.beginTransaction()
                     .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                     .commit();
+                Log.v(TAG, "Switching to PlaceholderFragment.");
                 break;
         }
     }
@@ -81,6 +85,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_sectionAdd);
                 break;
         }
     }
@@ -124,6 +131,8 @@ public class MainActivity extends ActionBarActivity
 //        }
         switch (id) {
             case R.id.action_search:
+                Log.i(TAG, "Switching to "
+                        + getString(R.string.title_sectionSearch) + " in optionsMenu.");
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, SearchFragment.newInstance(2))
                         .addToBackStack(null)
@@ -131,9 +140,14 @@ public class MainActivity extends ActionBarActivity
                 setActionBarTitle(getString(R.string.title_sectionSearch));
                 return true;
             case R.id.action_new:
+                Log.i(TAG, "Switching to "
+                        + getString(R.string.title_sectionAdd) + " in optionsMenu.");
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, AddFragment.newInstance(4))
+                        .addToBackStack(null)
+                        .commit();
                 Toast.makeText(getApplication(), "Adding new contact", Toast.LENGTH_SHORT)
                         .show();
-                setActionBarTitle(getString(R.string.title_sectionAdd));
             default:
                 return super.onOptionsItemSelected(item);
         }
