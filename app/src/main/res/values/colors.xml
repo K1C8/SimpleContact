@@ -3,6 +3,12 @@
 
     <item name="material_light_blue_500" type="color">#03A9F4</item>
     <item name="material_light_blue_700" type="color">#0288D1</item>
-    <item name="material_red_A200" type="color">#FF5252</item>
+    <item name="material_red_A100" type="color">#FF8A80</item>
+    <item name="material_white_full_opacity" type="color">#FFFFFFFF</item>
+
+    <item name="text_black_default" type="color">#57000000</item>
+    <item name="text_black_second_tier" type="color">#36000000</item>
+    <item name="text_black_third_tier" type="color">#26000000</item>
+    <item name="text_black_divider" type="color">#0C000000</item>
 
 </resources>

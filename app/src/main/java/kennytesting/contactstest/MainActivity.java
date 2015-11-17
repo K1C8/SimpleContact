@@ -21,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -141,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 mTitle = getString(R.string.title_section3);
                 break;
         }
+        Log.i(TAG, "Changing title to " + mTitle + " .");
     }
 
     @Override
@@ -175,10 +175,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "Switching to "
                         + getString(R.string.title_sectionAdd) + " in optionsMenu.");
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, AddFragment.newInstance(4))
+                        .replace(R.id.container, AddFragment.newInstance(3))
                         .commit();
-                Toast.makeText(getApplication(), "Adding new contact", Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(getApplication(), "Adding new contact", Toast.LENGTH_SHORT)
+//                        .show();
+                setActionBarTitle(getString(R.string.title_sectionAdd));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -207,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.container, AddFragment.newInstance(position + 1))
                         .commit();
                 Log.v(TAG, "Item " + getString(R.string.title_sectionAdd)
-                        + " in navigation drawer is selected, switching to SearchFragment.");
+                        + " in navigation drawer is selected, switching to AddFragment.");
                 break;
             default:
                 fragmentManager.beginTransaction()

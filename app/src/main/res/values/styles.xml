@@ -5,7 +5,26 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/material_light_blue_500</item>
         <item name="colorPrimaryDark">@color/material_light_blue_700</item>
-        <item name="colorAccent">@color/material_red_A200</item>
+        <item name="colorAccent">@color/material_red_A100</item>
     </style>
+
+    <style name="MyToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar">
+
+        <item name="colorPrimary">@color/material_light_blue_500</item>
+        <item name="colorPrimaryDark">@color/material_light_blue_700</item>
+        <item name="colorAccent">@color/material_red_A100</item>
+        <item name="android:textColorPrimary">@color/material_white_full_opacity</item>
+        <item name="actionMenuTextColor">@color/material_white_full_opacity</item>
+    </style>
+
+    <style name="MyTextInputLayoutTheme" parent="TextAppearance.AppCompat">
+
+        <item name="android:textSize">20sp</item>
+        <item name="colorAccent">@color/material_light_blue_500</item>
+        <item name="android:textColorHint">@color/text_black_third_tier</item>
+        <item name="colorControlNormal">@color/text_black_third_tier</item>
+    </style>
+
+
 
 </resources>

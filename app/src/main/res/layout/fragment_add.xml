@@ -1,31 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
+    android:padding="16dp">
 
-
-    <EditText
-        android:id="@+id/fragment_add_EditText_name"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/fragment_add_TextInputLayout_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:hint="@string/fragment_add_name" />
+        android:layout_height="72dp"
+        android:layout_gravity="bottom"
+        android:theme="@style/MyTextInputLayoutTheme">
 
-    <EditText
-        android:id="@+id/fragment_add_EditText_phone_number_1"
+        <EditText
+            android:id="@+id/fragment_add_EditText_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fragment_add_name"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/fragment_add_TextInputLayout_phone_number_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:hint="@string/fragment_add_phone_number" />
+        android:layout_height="72dp"
+        android:layout_gravity="bottom"
+        android:theme="@style/MyTextInputLayoutTheme">
 
-    <EditText
-        android:id="@+id/fragment_add_EditText_tag"
+        <EditText
+            android:id="@+id/fragment_add_EditText_phone_number_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:hint="@string/fragment_add_phone_number"
+            android:inputType="phone"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/fragment_add_TextInputLayout_tag"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:hint="@string/fragment_add_tag" />
+        android:layout_height="72dp"
+        android:layout_gravity="bottom"
+        android:theme="@style/MyTextInputLayoutTheme">
 
+        <EditText
+            android:id="@+id/fragment_add_EditText_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/fragment_add_tag"
+            android:inputType="textNoSuggestions"/>
 
+    </android.support.design.widget.TextInputLayout>
 </LinearLayout>
