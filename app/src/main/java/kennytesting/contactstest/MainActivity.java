@@ -6,10 +6,12 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTitle = getTitle();
         mDrawerTitle = getTitle();
+        final ActionBar actionBar = getSupportActionBar();
 
         // Set up the drawer.
         mFragmentsList = getResources().getStringArray(R.array.navigation_drawer_list);
@@ -86,20 +89,31 @@ public class MainActivity extends AppCompatActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mTitle);
+                if (null != actionBar) {
+                    actionBar.setTitle(mTitle);
+                }
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(mDrawerTitle);
+                if (null != actionBar) {
+                    actionBar.setTitle(mDrawerTitle);
+                }
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, ContactsFragment.newInstance(1))
+                .commit();
+        setActionBarTitle(getString(R.string.title_sectionContacts));
+
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
@@ -107,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
-        menu.findItem(R.id.action_add).setVisible(!drawerOpen);
+        if (null != menu.findItem(R.id.action_search))
+            menu.findItem(R.id.action_search).setVisible(!drawerOpen);
+        if (null != menu.findItem(R.id.action_add))
+            menu.findItem(R.id.action_add).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -147,6 +163,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         restoreActionBar();
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -194,28 +214,28 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, ContactsFragment.newInstance(position + 1))
                         .commit();
-                Log.v(TAG, "Item " + getString(R.string.title_sectionContacts)
+                Log.i(TAG, "Item " + getString(R.string.title_sectionContacts)
                         + " in navigation drawer is selected, switching to ContactsFragment.");
                 break;
             case 1:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, SearchFragment.newInstance(position + 1))
                         .commit();
-                Log.v(TAG, "Item " + getString(R.string.title_sectionSearch)
+                Log.i(TAG, "Item " + getString(R.string.title_sectionSearch)
                         + " in navigation drawer is selected, switching to SearchFragment.");
                 break;
             case 2:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, AddFragment.newInstance(position + 1))
                         .commit();
-                Log.v(TAG, "Item " + getString(R.string.title_sectionAdd)
+                Log.i(TAG, "Item " + getString(R.string.title_sectionAdd)
                         + " in navigation drawer is selected, switching to AddFragment.");
                 break;
             default:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                         .commit();
-                Log.v(TAG, "Item " + getString(R.string.title_section3)
+                Log.i(TAG, "Item " + getString(R.string.title_section3)
                         + " in navigation drawer is selected, switching to PlaceholderFragment.");
                 break;
         }
@@ -232,7 +252,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void setActionBarTitle(String title) {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(title);
+        if (null != actionBar)
+            actionBar.setTitle(title);
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -270,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            Log.i(TAG, "Placeholder fragment is being inflated.");
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }

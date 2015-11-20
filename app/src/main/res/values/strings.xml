@@ -16,6 +16,8 @@
         <item>@string/title_section3</item>
     </string-array>
 
+    <string name="snackbar_text">读取数据中，请稍候。</string>
+
     <string name="fragment_search_content">搜索条件</string>
     <string name="fragment_search_hint">搜索条件</string>
 
@@ -27,6 +29,5 @@
     <string name="action_new">新建</string>
     <string name="action_settings">设置</string>
 
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

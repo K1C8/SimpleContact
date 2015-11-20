@@ -12,7 +12,7 @@ public class Contact {
 
     public void setName(String name) { this.name = name; }
     public void setPinyin(String pinyin) { this.pinyin = pinyin; }
-    public void setnumber(String number) { this.number = number; }
+    public void setNumber(String number) { this.number = number; }
     public void setAddress(String address) { this.address = address; }
 
     public String getName() { return name; }
