@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,29 +27,6 @@ public class AddFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     /**
-     * SQLite related strings.
-     */
-    private static final String TEXT_TYPE = " TEXT";
-    private static final String COMMA_SEP = ",";
-    private static final String SQL_CREATE_TABLE_ENTRY =
-            "CREATE TABLE" + ContactsReaderContract.ContactsEntry.TABLE_NAME + " ("
-            + ContactsReaderContract.ContactsEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP
-            + ContactsReaderContract.ContactsEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP
-            + ContactsReaderContract.ContactsEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP
-            + ContactsReaderContract.ContactsEntry.COLUMN_NAME_PHONE_NUMBER + TEXT_TYPE + COMMA_SEP
-            + ContactsReaderContract.ContactsEntry.COLUMN_NAME_PINYIN + " )";
-    private static final String SQL_CREATE_TABLE_TAG =
-            "CREATE TABLE" + ContactsReaderContract.ContactsTagsEntry.TABLE_NAME + " ("
-            + ContactsReaderContract.ContactsTagsEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP
-            + ContactsReaderContract.ContactsTagsEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP
-            + ContactsReaderContract.ContactsTagsEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP
-            + ContactsReaderContract.ContactsTagsEntry.COLUMN_NAME_TAG + " )";
-    private static final String SQL_DROP_TABLE_ENTRY =
-            "DROP TABLE IF EXISTS " + ContactsReaderContract.ContactsEntry.TABLE_NAME;
-    private static final String SQL_DROP_TABLE_TAG =
-            "DROP TABLE IF EXISTS " + ContactsReaderContract.ContactsTagsEntry.TABLE_NAME;
-
-    /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
@@ -62,7 +42,26 @@ public class AddFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         return inflater.inflate(R.layout.fragment_add, container, false);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_fragment_add, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_check:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
