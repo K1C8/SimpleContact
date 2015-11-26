@@ -3,7 +3,10 @@ package kennytesting.contactstest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -39,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    /**
+     *
+     */
+    private SQLiteDatabase mSQLiteDB;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -113,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.container, ContactsFragment.newInstance(1))
                 .commit();
         setActionBarTitle(getString(R.string.title_sectionContacts));
+
+
+        Snackbar
+                .make(container, getString(R.string.snackbar_text_loading), Snackbar.LENGTH_LONG)
+                .show();
+
+        new DBWorkerTask().execute(this);
 
     }
 
@@ -195,15 +210,18 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "Switching to "
                         + getString(R.string.title_sectionAdd) + " in optionsMenu.");
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, AddFragment.newInstance(3))
+                        .replace(R.id.container, AddFragment.newInstance(3, this))
                         .commit();
-//                Toast.makeText(getApplication(), "Adding new contact", Toast.LENGTH_SHORT)
-//                        .show();
                 setActionBarTitle(getString(R.string.title_sectionAdd));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // For use in fragments.
+    public SQLiteDatabase getMSQLiteDB() {
+        return mSQLiteDB;
     }
 
     // update the main content by replacing fragments
@@ -226,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, AddFragment.newInstance(position + 1))
+                        .replace(R.id.container, AddFragment.newInstance(position + 1, this))
                         .commit();
                 Log.i(TAG, "Item " + getString(R.string.title_sectionAdd)
                         + " in navigation drawer is selected, switching to AddFragment.");
@@ -254,6 +272,11 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (null != actionBar)
             actionBar.setTitle(title);
+    }
+
+    public void showSnackbar(CharSequence text) {
+        Snackbar.make(findViewById(R.id.layer_container), text, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -292,8 +315,7 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             Log.i(TAG, "Placeholder fragment is being inflated.");
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+            return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
         @Override
@@ -301,6 +323,21 @@ public class MainActivity extends AppCompatActivity {
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+    }
+
+    private class DBWorkerTask extends AsyncTask<Context, Void, Void> {
+
+        protected Void doInBackground(Context... contexts) {
+            ContactsReaderDbHelper dbReader = ContactsReaderDbHelper.getInstance(contexts[0]);
+            mSQLiteDB = dbReader.getWritableDatabase();
+            Log.i(TAG, "Getting writable database.");
+            return null;
+        }
+
+        protected void onPostExecute(Void placeholder) {
+            showSnackbar(getString(R.string.snackbar_text_loaded));
+            Log.i(TAG, "Showing loaded snackbar.");
         }
     }
 

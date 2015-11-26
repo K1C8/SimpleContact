@@ -3,7 +3,6 @@ package kennytesting.contactstest;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,9 +66,6 @@ public class ContactsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-        Snackbar
-                .make(view, getString(R.string.snackbar_text), Snackbar.LENGTH_LONG)
-                .show();
         return view;
     }
 
